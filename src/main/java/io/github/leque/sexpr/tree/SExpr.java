@@ -1,5 +1,6 @@
 package io.github.leque.sexpr.tree;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -60,5 +61,17 @@ public interface SExpr {
 
     default Optional<List<SExpr>> asVector() {
         return Optional.empty();
+    }
+
+    void writeTo(Appendable buffer) throws IOException;
+
+    default String toWrittenString() {
+        StringBuilder builder = new StringBuilder();
+        try {
+            this.writeTo(builder);
+        } catch (IOException e) {
+            throw new IllegalStateException("must not happen");
+        }
+        return builder.toString();
     }
 }

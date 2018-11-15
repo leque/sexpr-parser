@@ -233,25 +233,25 @@ public class SExprParser {
 
         @Override
         public void exitQuoted(SchemeParser.QuotedContext ctx) {
-            expandAbbr("quote");
+            expandAbbr(SExprs.QUOTE_NAME);
             super.exitQuoted(ctx);
         }
 
         @Override
         public void exitQuasiquoted(SchemeParser.QuasiquotedContext ctx) {
-            expandAbbr("quasiquote");
+            expandAbbr(SExprs.QUASIQUOTE_NAME);
             super.exitQuasiquoted(ctx);
         }
 
         @Override
         public void exitUnquoted(SchemeParser.UnquotedContext ctx) {
-            expandAbbr("unquote");
+            expandAbbr(SExprs.UNQUOTE_NAME);
             super.exitUnquoted(ctx);
         }
 
         @Override
         public void exitUnquoteSplicinged(SchemeParser.UnquoteSplicingedContext ctx) {
-            expandAbbr("unquote-splicing");
+            expandAbbr(SExprs.UNQUOTE_SPLICING_NAME);
             super.exitUnquoteSplicinged(ctx);
         }
 

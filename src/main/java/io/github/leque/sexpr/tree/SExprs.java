@@ -1,5 +1,6 @@
 package io.github.leque.sexpr.tree;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -60,6 +61,62 @@ public class SExprs {
         return new VectorValue(Arrays.asList(reprs));
     }
 
+    public static final String QUOTE_NAME = "quote";
+
+    public static final String QUASIQUOTE_NAME = "quasiquote";
+
+    public static final String UNQUOTE_NAME = "unquote";
+
+    public static final String UNQUOTE_SPLICING_NAME = "unquote-splicing";
+
+    static void writeString(int[] codePoints, char quote, Appendable buffer) throws IOException {
+        buffer.append(quote);
+        for (int cp : codePoints) {
+            if (cp == quote) {
+                buffer.append("\\");
+                buffer.append(quote);
+            } else if (cp == '\\') {
+                buffer.append("\\\\");
+            } else if (Character.isISOControl(cp)) {
+                buffer.append(String.format("\\x%x;", cp));
+            } else {
+                switch (cp) {
+                    case '\u0007':
+                        buffer.append("\\a");
+                        break;
+                    case '\b':
+                        buffer.append("\\b");
+                        break;
+                    case '\t':
+                        buffer.append("\\t");
+                        break;
+                    case '\n':
+                        buffer.append("\\n");
+                        break;
+                    case '\r':
+                        buffer.append("\\r");
+                        break;
+                    default:
+                        char[] cs = Character.toChars(cp);
+                        buffer.append(new String(cs, 0, cs.length));
+                        break;
+                }
+            }
+        }
+        buffer.append(quote);
+    }
+
+    static void writeSeq(List<SExpr> elems, String open, String close, Appendable buffer) throws IOException {
+        buffer.append(open);
+        String sep = "";
+        for (SExpr elem : elems) {
+            buffer.append(sep);
+            elem.writeTo(buffer);
+            sep = " ";
+        }
+        buffer.append(close);
+    }
+
     public static class BooleanValue implements SExpr {
         private final Optional<Boolean> repr;
 
@@ -98,6 +155,11 @@ public class SExprs {
         public int hashCode() {
             return Objects.hash(repr);
         }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            buffer.append(repr.get() ? "#t" : "#f");
+        }
     }
 
     public static class IntegerValue implements SExpr {
@@ -133,6 +195,11 @@ public class SExprs {
         @Override
         public int hashCode() {
             return Objects.hash(repr);
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            buffer.append(repr.get().toString());
         }
     }
 
@@ -170,6 +237,11 @@ public class SExprs {
         public int hashCode() {
             return Objects.hash(repr);
         }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            buffer.append(repr.get().toString());
+        }
     }
 
     public static class StringValue implements SExpr {
@@ -205,6 +277,11 @@ public class SExprs {
         @Override
         public int hashCode() {
             return Objects.hash(repr);
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            writeString(repr.get().codePoints().toArray(), '"', buffer);
         }
     }
 
@@ -242,6 +319,112 @@ public class SExprs {
         public int hashCode() {
             return Objects.hash(repr);
         }
+
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            String name = repr.get();
+            int[] codePoints = name.codePoints().toArray();
+            if (isSimpleName(codePoints)) {
+                buffer.append(name);
+            } else {
+                writeString(codePoints, '|', buffer);
+            }
+        }
+
+        private boolean isSimpleName(int[] codePoints) {
+            int len = codePoints.length;
+            if (len == 0)
+                return false;
+
+            // : Initial Subsequent*
+            if (isInitial(codePoints[0]))
+                return allSubsequent(codePoints, 1);
+
+            if (isExplicitSign(codePoints[0])) {
+                // : ExplicitSign
+                if (len == 1)
+                    return true;
+
+                // | ExplicitSign SignSubsequent Subsequent*
+                if (isSignSubsequent(codePoints[1]))
+                    return allSubsequent(codePoints, 2);
+
+                // | ExplicitSign '.' DotSubsequent Subsequent*
+                if (len >= 3 && codePoints[1] == '.' && isDotSubsequent(codePoints[2]))
+                    return allSubsequent(codePoints, 3);
+
+                return false;
+            }
+
+            // | '.' DotSubsequent Subsequent*
+            if (codePoints[0] == '.' && len >= 2 && isDotSubsequent(codePoints[1]))
+                return allSubsequent(codePoints, 2);
+
+            return false;
+        }
+
+        private boolean allSubsequent(int[] codePoints, int start) {
+            for (int i = start; i < codePoints.length; ++i) {
+                if (isSubsequent(codePoints[i]) == false)
+                    return false;
+            }
+            return true;
+        }
+
+        private boolean isInitial(int cp) {
+            return isLetter(cp) || isSpecialInitial(cp);
+        }
+
+        private boolean isLetter(int cp) {
+            return ('a' <= cp && cp <= 'z') || ('A' <= cp && cp <= 'Z');
+        }
+
+        private boolean isDigit(int cp) {
+            return ('0' <= cp && cp <= '9');
+        }
+
+        private boolean isSpecialInitial(int cp) {
+            switch (cp) {
+                case '!':
+                case '$':
+                case '%':
+                case '&':
+                case '*':
+                case '/':
+                case ':':
+                case '<':
+                case '=':
+                case '>':
+                case '?':
+                case '^':
+                case '_':
+                case '~':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private boolean isExplicitSign(int cp) {
+            return cp == '+' || cp == '-';
+        }
+
+        private boolean isSpecialSubsequent(int cp) {
+            return isExplicitSign(cp) || cp == '.' || cp == '@';
+        }
+
+        private boolean isSubsequent(int cp) {
+            return isInitial(cp) || isDigit(cp) || isSpecialSubsequent(cp);
+        }
+
+        private boolean isDotSubsequent(int cp) {
+            return isSignSubsequent(cp) || cp == '.';
+        }
+
+        private boolean isSignSubsequent(int cp) {
+            return isInitial(cp) || isExplicitSign(cp) || cp == '@';
+        }
     }
 
     public static class ListValue implements SExpr {
@@ -278,6 +461,38 @@ public class SExprs {
         public int hashCode() {
             return Objects.hash(repr);
         }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            List<SExpr> elems = repr.get();
+            if (elems.size() == 2 && elems.get(0).isSymbol()) {
+                String abbr = null;
+                switch (elems.get(0).asSymbol().get()) {
+                    case QUOTE_NAME:
+                        abbr = "'";
+                        break;
+                    case QUASIQUOTE_NAME:
+                        abbr = "`";
+                        break;
+                    case UNQUOTE_NAME:
+                        abbr = ",";
+                        break;
+                    case UNQUOTE_SPLICING_NAME:
+                        abbr = ",@";
+                        break;
+                }
+                if (abbr != null) {
+                    writeAbbreviation(abbr, elems.get(1), buffer);
+                    return;
+                }
+            }
+            writeSeq(elems, "(", ")", buffer);
+        }
+
+        private void writeAbbreviation(String abbreviation, SExpr elem, Appendable buffer) throws IOException {
+            buffer.append(abbreviation);
+            elem.writeTo(buffer);
+        }
     }
 
     public static class VectorValue implements SExpr {
@@ -313,6 +528,11 @@ public class SExprs {
         @Override
         public int hashCode() {
             return Objects.hash(repr);
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            writeSeq(repr.get(), "#(", ")", buffer);
         }
     }
 }

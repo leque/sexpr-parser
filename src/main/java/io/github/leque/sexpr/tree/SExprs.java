@@ -140,7 +140,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "BooleanValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override
@@ -181,7 +181,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "IntegerValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override
@@ -222,7 +222,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "FlonumValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override
@@ -263,7 +263,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "StringValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override
@@ -304,7 +304,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "SymbolValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override
@@ -446,7 +446,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "ListValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override
@@ -514,7 +514,7 @@ public class SExprs {
 
         @Override
         public String toString() {
-            return "VectorValue{" + repr.get() + '}';
+            return this.toWrittenString();
         }
 
         @Override

@@ -195,6 +195,18 @@ public class SExprParser {
             put('\"', '\"');
         }};
 
+        private boolean isWhitespace(char c) {
+            switch (c) {
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         private String interpretEscapeSequences(String input) {
             StringBuilder builder = new StringBuilder();
             int pos = 0;
@@ -210,6 +222,11 @@ public class SExprParser {
                     char[] cs = Character.toChars(Integer.parseInt(input.substring(p + 2, i), 16));
                     builder.append(cs);
                     pos = i + 1;
+                } else if (isWhitespace(c)) {
+                    pos = p + 1;
+                    while (isWhitespace(input.charAt(pos))) {
+                        ++pos;
+                    }
                 } else {
                     throw new IllegalStateException("unknown escape sequence: \\" + c);
                 }

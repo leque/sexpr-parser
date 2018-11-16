@@ -22,7 +22,7 @@ fragment HexEscape : '\\x' HexDigit+ ';';
 
 fragment MnemonicEscape : '\\' [abtnr];
 
-fragment StringOrSymbolElement : HexEscape | MnemonicEscape;
+fragment StringOrSymbolElement : HexEscape | MnemonicEscape | '\\' IntralineWhitespace* LineEnding IntralineWhitespace* ;
 
 fragment StringElement : ~[\\"] | '\\' '"' | StringOrSymbolElement;
 

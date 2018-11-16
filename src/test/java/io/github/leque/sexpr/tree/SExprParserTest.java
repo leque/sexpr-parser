@@ -68,7 +68,10 @@ class SExprParserTest {
                         SExprParser.parse("\"a|b\"")),
                 () -> Assertions.assertEquals(
                         SExprs.stringValue("\nb"),
-                        SExprParser.parse("\"\\nb\""))
+                        SExprParser.parse("\"\\nb\"")),
+                () -> Assertions.assertEquals(
+                        SExprs.stringValue("b"),
+                        SExprParser.parse("\"\\  \n  b\""))
         );
     }
 
@@ -116,7 +119,10 @@ class SExprParserTest {
                         SExprParser.parse("|a\\|b|")),
                 () -> Assertions.assertEquals(
                         SExprs.symbolValue("\nb"),
-                        SExprParser.parse("|\\nb|"))
+                        SExprParser.parse("|\\nb|")),
+                () -> Assertions.assertEquals(
+                        SExprs.symbolValue("b"),
+                        SExprParser.parse("|\\  \n  b|"))
         );
     }
 

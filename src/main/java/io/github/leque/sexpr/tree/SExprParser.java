@@ -24,15 +24,6 @@ public class SExprParser {
         return parse(CharStreams.fromString(input));
     }
 
-    public static SExpr parseSymbol(String input) {
-        SchemeLexer lexer = new SchemeLexer(CharStreams.fromString(input));
-        TokenStream tokens = new CommonTokenStream(lexer);
-        SchemeParser parser = new SchemeParser(tokens);
-        SExprListener sexprListener = new SExprListener();
-        ParseTreeWalker.DEFAULT.walk(sexprListener, parser.identifier());
-        return sexprListener.getParsedExpression();
-    }
-
     private static SExpr parse(CharStream inputStream) {
         SchemeLexer lexer = new SchemeLexer(inputStream);
         TokenStream tokens = new CommonTokenStream(lexer);

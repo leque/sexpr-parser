@@ -134,7 +134,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<Boolean> asBoolean() {
+        public Optional<Boolean> getBooleanValue() {
             return repr;
         }
 
@@ -175,7 +175,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<BigInteger> asInteger() {
+        public Optional<BigInteger> getIntegerValue() {
             return this.repr;
         }
 
@@ -216,7 +216,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<BigDecimal> asFlonum() {
+        public Optional<BigDecimal> getFlonumValue() {
             return this.repr;
         }
 
@@ -257,7 +257,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<String> asString() {
+        public Optional<String> getStringValue() {
             return this.repr;
         }
 
@@ -298,7 +298,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<String> asSymbol() {
+        public Optional<String> getSymbolName() {
             return this.repr;
         }
 
@@ -440,7 +440,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<List<SExpr>> asList() {
+        public Optional<List<SExpr>> getListElements() {
             return this.repr;
         }
 
@@ -467,7 +467,7 @@ public class SExprs {
             List<SExpr> elems = repr.get();
             if (elems.size() == 2 && elems.get(0).isSymbol()) {
                 String abbr = null;
-                switch (elems.get(0).asSymbol().get()) {
+                switch (elems.get(0).getSymbolName().get()) {
                     case QUOTE_NAME:
                         abbr = "'";
                         break;
@@ -508,7 +508,7 @@ public class SExprs {
         }
 
         @Override
-        public Optional<List<SExpr>> asVector() {
+        public Optional<List<SExpr>> getVectorElements() {
             return this.repr;
         }
 

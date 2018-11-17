@@ -11,7 +11,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<Boolean> asBoolean() {
+    default Optional<Boolean> getBooleanValue() {
         return Optional.empty();
     }
 
@@ -19,7 +19,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<BigInteger> asInteger() {
+    default Optional<BigInteger> getIntegerValue() {
         return Optional.empty();
     }
 
@@ -27,7 +27,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<BigDecimal> asFlonum() {
+    default Optional<BigDecimal> getFlonumValue() {
         return Optional.empty();
     }
 
@@ -35,7 +35,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<String> asString() {
+    default Optional<String> getStringValue() {
         return Optional.empty();
     }
 
@@ -43,7 +43,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<String> asSymbol() {
+    default Optional<String> getSymbolName() {
         return Optional.empty();
     }
 
@@ -51,7 +51,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<List<SExpr>> asList() {
+    default Optional<List<SExpr>> getListElements() {
         return Optional.empty();
     }
 
@@ -59,7 +59,7 @@ public interface SExpr {
         return false;
     }
 
-    default Optional<List<SExpr>> asVector() {
+    default Optional<List<SExpr>> getVectorElements() {
         return Optional.empty();
     }
 

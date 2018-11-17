@@ -36,7 +36,7 @@ public interface SExpr {
     }
 
     default Optional<String> asString() {
-        return Optional.empty().empty();
+        return Optional.empty();
     }
 
     default boolean isSymbol() {

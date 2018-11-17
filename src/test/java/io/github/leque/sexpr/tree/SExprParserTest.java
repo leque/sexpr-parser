@@ -136,6 +136,18 @@ class SExprParserTest {
     }
 
     @Test
+    public void SExprParser_is_able_to_parse_dotted_list() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        SExprs.dottedListValue(SExprs.trueValue(), SExprs.falseValue()),
+                        SExprParser.parse("(#t . #f)")),
+                () -> Assertions.assertEquals(
+                        SExprs.dottedListValue(SExprs.trueValue(), SExprs.integerValue(42), SExprs.falseValue()),
+                        SExprParser.parse("(#t 42 . #f)"))
+        );
+    }
+
+    @Test
     public void SExprParser_is_able_to_parse_vector() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(

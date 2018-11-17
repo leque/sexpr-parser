@@ -288,6 +288,20 @@ public class SExprParser {
         }
 
         @Override
+        public void enterDottedList(SchemeParser.DottedListContext ctx) {
+            super.enterDottedList(ctx);
+            newEnv();
+        }
+
+        @Override
+        public void exitDottedList(SchemeParser.DottedListContext ctx) {
+            List<SExpr> elems = popEnv();
+            SExpr end = elems.remove(elems.size() - 1);
+            pushValue(SExprs.dottedListValue(elems, end));
+            super.exitDottedList(ctx);
+        }
+
+        @Override
         public void enterVector(SchemeParser.VectorContext ctx) {
             super.enterVector(ctx);
             newEnv();

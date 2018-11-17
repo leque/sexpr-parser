@@ -1,8 +1,11 @@
 package io.github.leque.sexpr.tree;
 
+import org.antlr.v4.runtime.misc.Pair;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +54,21 @@ public class SExprs {
 
     public static SExpr listValue(SExpr... reprs) {
         return new ListValue(Arrays.asList(reprs));
+    }
+
+    public static SExpr dottedListValue(List<SExpr> elems, SExpr end) {
+        if (elems.isEmpty()) {
+            throw new IllegalArgumentException("dotted-list should have 2 or more elements");
+        }
+        return new DottedListValue(elems, end);
+    }
+
+    public static SExpr dottedListValue(SExpr elem1, SExpr elem2, SExpr... elems) {
+        List<SExpr> es = new ArrayList<>(elems.length + 2);
+        es.add(elem1);
+        es.add(elem2);
+        es.addAll(Arrays.asList(elems));
+        return dottedListValue(es.subList(0, es.size() - 1), es.get(es.size() - 1));
     }
 
     public static SExpr vectorValue(List<SExpr> repr) {
@@ -492,6 +510,54 @@ public class SExprs {
         private void writeAbbreviation(String abbreviation, SExpr elem, Appendable buffer) throws IOException {
             buffer.append(abbreviation);
             elem.writeTo(buffer);
+        }
+    }
+
+    public static class DottedListValue implements SExpr {
+        private final List<SExpr> elements;
+        private final SExpr end;
+        private final Optional<Pair<List<SExpr>, SExpr>> repr;
+
+        public DottedListValue(List<SExpr> elems, SExpr end) {
+            this.elements = Collections.unmodifiableList(elems);
+            this.end = end;
+            this.repr = Optional.of(new Pair(this.elements, this.end));
+        }
+
+        @Override
+        public boolean isDottedList() {
+            return true;
+        }
+
+        @Override
+        public Optional<Pair<List<SExpr>, SExpr>> getDottedListElements() {
+            return repr;
+        }
+
+        @Override
+        public String toString() {
+            return this.toWrittenString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            DottedListValue that = (DottedListValue) o;
+            return Objects.equals(repr, that.repr);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(repr);
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            writeSeq(this.elements, "(", "", buffer);
+            buffer.append(" . ");
+            end.writeTo(buffer);
+            buffer.append(")");
         }
     }
 

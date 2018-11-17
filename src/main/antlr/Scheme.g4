@@ -97,6 +97,8 @@ string: String;
 
 list: '(' sexpr* intertokenSpace ')';
 
+dottedList: '(' sexpr+ intertokenSpace '.' sexpr intertokenSpace ')';
+
 vector: '#(' sexpr* intertokenSpace ')';
 
 quoted : '\'' sexpr;
@@ -109,6 +111,6 @@ unquoteSplicinged : ',@' sexpr;
 
 abbreviation : quoted | quasiquoted | unquoted | unquoteSplicinged;
 
-sexpr : intertokenSpace (integer | flonum | true_ | false_ | string | identifier | escapedIdentifier | list | vector | abbreviation);
+sexpr : intertokenSpace (integer | flonum | true_ | false_ | string | identifier | escapedIdentifier | list | dottedList | vector | abbreviation);
 
 sexprEof : sexpr intertokenSpace EOF;

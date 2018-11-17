@@ -1,5 +1,7 @@
 package io.github.leque.sexpr.tree;
 
+import org.antlr.v4.runtime.misc.Pair;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -52,6 +54,14 @@ public interface SExpr {
     }
 
     default Optional<List<SExpr>> getListElements() {
+        return Optional.empty();
+    }
+
+    default boolean isDottedList() {
+        return false;
+    }
+
+    default Optional<Pair<List<SExpr>, SExpr>> getDottedListElements() {
         return Optional.empty();
     }
 

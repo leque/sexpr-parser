@@ -87,7 +87,7 @@ public class SExprs {
 
     public static final String UNQUOTE_SPLICING_NAME = "unquote-splicing";
 
-    static void writeString(int[] codePoints, char quote, Appendable buffer) throws IOException {
+    private static void writeString(int[] codePoints, char quote, Appendable buffer) throws IOException {
         buffer.append(quote);
         for (int cp : codePoints) {
             if (cp == quote) {
@@ -124,7 +124,7 @@ public class SExprs {
         buffer.append(quote);
     }
 
-    static void writeSeq(List<SExpr> elems, String open, String close, Appendable buffer) throws IOException {
+    private static void writeSeq(List<SExpr> elems, String open, String close, Appendable buffer) throws IOException {
         buffer.append(open);
         String sep = "";
         for (SExpr elem : elems) {
@@ -183,7 +183,7 @@ public class SExprs {
     public static class IntegerValue implements SExpr {
         private final Optional<BigInteger> repr;
 
-        public IntegerValue(BigInteger repr) {
+        private IntegerValue(BigInteger repr) {
             this.repr = Optional.of(repr);
         }
 
@@ -224,7 +224,7 @@ public class SExprs {
     public static class FlonumValue implements SExpr {
         private final Optional<BigDecimal> repr;
 
-        public FlonumValue(BigDecimal repr) {
+        private FlonumValue(BigDecimal repr) {
             this.repr = Optional.of(repr);
         }
 
@@ -265,7 +265,7 @@ public class SExprs {
     public static class StringValue implements SExpr {
         private final Optional<String> repr;
 
-        public StringValue(String s) {
+        private StringValue(String s) {
             this.repr = Optional.of(s);
         }
 
@@ -306,7 +306,7 @@ public class SExprs {
     public static class SymbolValue implements SExpr {
         private final Optional<String> repr;
 
-        public SymbolValue(String s) {
+        private SymbolValue(String s) {
             this.repr = Optional.of(s);
         }
 
@@ -448,7 +448,7 @@ public class SExprs {
     public static class ListValue implements SExpr {
         private final Optional<List<SExpr>> repr;
 
-        public ListValue(List<SExpr> elems) {
+        private ListValue(List<SExpr> elems) {
             this.repr = Optional.of(Collections.unmodifiableList(elems));
         }
 
@@ -518,7 +518,7 @@ public class SExprs {
         private final SExpr end;
         private final Optional<Pair<List<SExpr>, SExpr>> repr;
 
-        public DottedListValue(List<SExpr> elems, SExpr end) {
+        private DottedListValue(List<SExpr> elems, SExpr end) {
             this.elements = Collections.unmodifiableList(elems);
             this.end = end;
             this.repr = Optional.of(new Pair(this.elements, this.end));
@@ -564,7 +564,7 @@ public class SExprs {
     public static class VectorValue implements SExpr {
         private final Optional<List<SExpr>> repr;
 
-        public VectorValue(List<SExpr> elems) {
+        private VectorValue(List<SExpr> elems) {
             this.repr = Optional.of(Collections.unmodifiableList(elems));
         }
 

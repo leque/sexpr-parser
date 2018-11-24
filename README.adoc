@@ -1,0 +1,33 @@
+= A parser for subset of R7RS Scheme datum
+
+This is an link:https://www.antlr.org/[ANTLR]4 grammar for subset of
+R7RS Scheme datum and an example parser written in Java.
+
+Supported syntaxes are:
+
+* boolean,
+* integer,
+* flonum,
+* string,
+* symbol,
+* proper- and dotted-list,
+* vector,
+* abbreviation,
+* line comment, and
+* datum comment.
+
+Unsupported syntaxes are:
+
+* character,
+* bytevector,
+* exactness prefix,
+* radix prefix,
+* infnan,
+* complex,
+* rational,
+* datum label, and
+* block comment.
+
+== License
+
+MIT

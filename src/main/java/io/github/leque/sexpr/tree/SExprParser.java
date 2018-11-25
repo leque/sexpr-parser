@@ -159,8 +159,32 @@ public class SExprParser {
 
         @Override
         public void exitInteger(SchemeParser.IntegerContext ctx) {
-            pushValue(SExprs.integerValue(new BigInteger(inputText(ctx))));
+            String text = inputText(ctx);
+            if (text.startsWith("#"))
+                text = text.substring(2);
+            pushValue(SExprs.integerValue(new BigInteger(text)));
             super.exitInteger(ctx);
+        }
+
+        @Override
+        public void exitInteger2(SchemeParser.Integer2Context ctx) {
+            String text = inputText(ctx);
+            pushValue(SExprs.integerValue(new BigInteger(text.substring(2), 2)));
+            super.exitInteger2(ctx);
+        }
+
+        @Override
+        public void exitInteger8(SchemeParser.Integer8Context ctx) {
+            String text = inputText(ctx);
+            pushValue(SExprs.integerValue(new BigInteger(text.substring(2), 8)));
+            super.exitInteger8(ctx);
+        }
+
+        @Override
+        public void exitInteger16(SchemeParser.Integer16Context ctx) {
+            String text = inputText(ctx);
+            pushValue(SExprs.integerValue(new BigInteger(text.substring(2), 16)));
+            super.exitInteger16(ctx);
         }
 
         @Override

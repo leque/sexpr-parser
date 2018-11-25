@@ -28,11 +28,34 @@ class SExprParserTest {
 
     @Test
     public void SExprParser_is_able_to_parse_integer() {
-        String src = "1";
-        SExpr expected = SExprs.integerValue(1);
-        SExpr parsed = SExprParser.parse(src);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(expected, parsed)
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(42),
+                        SExprParser.parse("42")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(56),
+                        SExprParser.parse("#d56")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(-42),
+                        SExprParser.parse("#D-42")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(0xcafebabeL),
+                        SExprParser.parse("#Xcafebabe")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(-0xdeadbeefL),
+                        SExprParser.parse("#x-DeadBeef")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(0666),
+                        SExprParser.parse("#o666")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(-0644),
+                        SExprParser.parse("#O-644")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(-0b1101),
+                        SExprParser.parse("#B-1101")),
+                () -> Assertions.assertEquals(
+                        SExprs.integerValue(0b101),
+                        SExprParser.parse("#b101"))
         );
     }
 

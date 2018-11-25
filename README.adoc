@@ -21,7 +21,6 @@ Unsupported syntaxes are:
 * character,
 * bytevector,
 * exactness prefix,
-* radix prefix,
 * infnan,
 * complex,
 * rational,

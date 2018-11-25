@@ -23,6 +23,14 @@ grammar Scheme;
 
 fragment Digit : [0-9];
 
+fragment Digit10 : Digit;
+
+fragment Digit2 : [0-1];
+
+fragment Digit8 : [0-7];
+
+fragment Digit16 : HexDigit;
+
 fragment HexDigit : Digit | [a-fA-F];
 
 fragment ExplicitSign : '-' | '+';
@@ -69,7 +77,13 @@ fragment DotSubsequent : SignSubsequent | '.';
 fragment SignSubsequent : Initial | ExplicitSign | '@';
 
 // lexer rules
-Integer : Sign Digit+ Exp?;
+Integer : ('#' [Dd])? Sign Digit+ Exp?;
+
+Integer2 : '#' [Bb] Sign Digit2+;
+
+Integer8 : '#' [Oo] Sign Digit8+;
+
+Integer16 : '#' [Xx] Sign Digit16+;
 
 Flonum : Integer '.' Digit* Exp?;
 
@@ -102,6 +116,12 @@ intertokenSpace : (whiteSpaces | lineComment | datumComment)*;
 
 integer : Integer;
 
+integer2 : Integer2;
+
+integer8 : Integer8;
+
+integer16 : Integer16;
+
 flonum : Flonum;
 
 true_ : True;
@@ -130,6 +150,13 @@ unquoteSplicinged : ',@' sexpr;
 
 abbreviation : quoted | quasiquoted | unquoted | unquoteSplicinged;
 
-sexpr : intertokenSpace (integer | flonum | true_ | false_ | string | identifier | escapedIdentifier | list | dottedList | vector | abbreviation);
+sexpr : intertokenSpace
+ ( integer | integer2 | integer8 | integer16
+ | flonum
+ | true_ | false_
+ | string | identifier | escapedIdentifier
+ | list | dottedList | vector
+ | abbreviation
+ );
 
 sexprEof : sexpr intertokenSpace EOF;

@@ -6,7 +6,7 @@ R7RS Scheme datum and an example parser written in Java.
 Supported syntaxes are:
 
 * boolean,
-* integer,
+* integer (binary, octal, decimal, and hexadecimal),
 * flonum,
 * string,
 * symbol,

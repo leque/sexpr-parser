@@ -189,7 +189,10 @@ public class SExprParser {
 
         @Override
         public void exitFlonum(SchemeParser.FlonumContext ctx) {
-            pushValue(SExprs.flonumValue(new BigDecimal(inputText(ctx))));
+            String text = inputText(ctx);
+            if (text.startsWith("#"))
+                text = text.substring(2);
+            pushValue(SExprs.flonumValue(new BigDecimal(text)));
             super.exitFlonum(ctx);
         }
 

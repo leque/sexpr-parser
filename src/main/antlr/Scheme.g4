@@ -37,7 +37,7 @@ fragment ExplicitSign : '-' | '+';
 
 fragment Sign : ExplicitSign?;
 
-fragment Exp : [eE] Integer;
+fragment Exp : [eE] Digit10+;
 
 fragment IntralineWhitespace : [ \t];
 
@@ -76,8 +76,10 @@ fragment DotSubsequent : SignSubsequent | '.';
 
 fragment SignSubsequent : Initial | ExplicitSign | '@';
 
+fragment Radix10 : ('#' [Dd])?;
+
 // lexer rules
-Integer : ('#' [Dd])? Sign Digit+ Exp?;
+Integer10 : Radix10 Sign Digit+;
 
 Integer2 : '#' [Bb] Sign Digit2+;
 
@@ -85,7 +87,11 @@ Integer8 : '#' [Oo] Sign Digit8+;
 
 Integer16 : '#' [Xx] Sign Digit16+;
 
-Flonum : Integer '.' Digit* Exp?;
+Flonum : Radix10 Sign
+         ( Digit10+ Exp
+         | Digit10* '.' Digit10+ Exp?
+         | Digit10+ '.' Digit10* Exp?
+         );
 
 True : '#' [Tt] ([Rr] [Uu] [Ee])?;
 
@@ -114,7 +120,7 @@ datumComment : '#;' sexpr;
 
 intertokenSpace : (whiteSpaces | lineComment | datumComment)*;
 
-integer : Integer;
+integer : Integer10;
 
 integer2 : Integer2;
 

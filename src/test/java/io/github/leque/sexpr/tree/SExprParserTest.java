@@ -64,7 +64,22 @@ class SExprParserTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(
                         SExprs.flonumValue("42.0"),
-                        SExprParser.parse("42."))
+                        SExprParser.parse("42.")),
+                () -> Assertions.assertEquals(
+                        SExprs.flonumValue("42.0"),
+                        SExprParser.parse("#d42.")),
+                () -> Assertions.assertEquals(
+                        SExprs.flonumValue("42.0"),
+                        SExprParser.parse(".42e2")),
+                () -> Assertions.assertEquals(
+                        SExprs.flonumValue("42.0"),
+                        SExprParser.parse("4.2e1")),
+                () -> Assertions.assertEquals(
+                        SExprs.flonumValue("42.0"),
+                        SExprParser.parse("42.e0")),
+                () -> Assertions.assertEquals(
+                        SExprs.flonumValue("42.0"),
+                        SExprParser.parse("42e0"))
         );
     }
 

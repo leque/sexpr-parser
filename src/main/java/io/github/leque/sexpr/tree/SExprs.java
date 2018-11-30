@@ -175,14 +175,15 @@ public class SExprs {
         buffer.append(close);
     }
 
-    public static class BooleanValue implements SExpr {
+    enum BooleanValue implements SExpr {
+        TRUE(true),
+        FALSE(false);
+
+        private final boolean value;
         private final Optional<Boolean> repr;
 
-        private static BooleanValue TRUE = new BooleanValue(true);
-
-        private static BooleanValue FALSE = new BooleanValue(false);
-
         private BooleanValue(boolean b) {
+            this.value = b;
             this.repr = Optional.of(b);
         }
 
@@ -202,21 +203,8 @@ public class SExprs {
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            BooleanValue that = (BooleanValue) o;
-            return Objects.equals(repr, that.repr);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(repr);
-        }
-
-        @Override
         public void writeTo(Appendable buffer) throws IOException {
-            buffer.append(repr.get() ? "#t" : "#f");
+            buffer.append(this.value ? "#t" : "#f");
         }
     }
 

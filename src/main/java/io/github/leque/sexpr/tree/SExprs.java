@@ -87,6 +87,34 @@ public class SExprs {
 
     public static final String UNQUOTE_SPLICING_NAME = "unquote-splicing";
 
+    public static boolean isPositiveInf(String name) {
+        return name.equalsIgnoreCase("+inf.0");
+    }
+
+    public static boolean isNegativeInf(String name) {
+        return name.equalsIgnoreCase("-inf.0");
+    }
+
+    public static boolean isPositiveNaN(String name) {
+        return name.equalsIgnoreCase("+nan.0");
+    }
+
+    public static boolean isNegativeNaN(String name) {
+        return name.equalsIgnoreCase("-nan.0");
+    }
+
+    public static boolean isNan(String name) {
+        return isPositiveNaN(name) || isNegativeNaN(name);
+    }
+
+    public static boolean isPositiveI(String name) {
+        return name.equalsIgnoreCase("+i");
+    }
+
+    public static boolean isNegativeI(String name) {
+        return name.equalsIgnoreCase("-i");
+    }
+
     private static void writeString(int[] codePoints, char quote, Appendable buffer) throws IOException {
         buffer.append(quote);
         for (int cp : codePoints) {
@@ -343,16 +371,21 @@ public class SExprs {
         public void writeTo(Appendable buffer) throws IOException {
             String name = repr.get();
             int[] codePoints = name.codePoints().toArray();
-            if (isSimpleName(codePoints)) {
+            if (isSimpleName(name, codePoints)) {
                 buffer.append(name);
             } else {
                 writeString(codePoints, '|', buffer);
             }
         }
 
-        private boolean isSimpleName(int[] codePoints) {
+        private boolean isSimpleName(String name, int[] codePoints) {
             int len = codePoints.length;
             if (len == 0)
+                return false;
+
+            if (isPositiveInf(name) || isNegativeInf(name)
+                    || isPositiveNaN(name) || isNegativeNaN(name)
+                    || isPositiveI(name) || isNegativeI(name))
                 return false;
 
             // : Initial Subsequent*

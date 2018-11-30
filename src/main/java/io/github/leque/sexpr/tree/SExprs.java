@@ -40,6 +40,18 @@ public class SExprs {
         return new FlonumValue(new BigDecimal(repr));
     }
 
+    public static SExpr negativeInfinityValue() {
+        return InfinityValue.NEGATIVE;
+    }
+
+    public static SExpr positiveInfinityValue() {
+        return InfinityValue.POSITIVE;
+    }
+
+    public static SExpr nanValue() {
+        return NanValue.INSTANCE;
+    }
+
     public static SExpr stringValue(String repr) {
         return new StringValue(repr);
     }
@@ -287,6 +299,72 @@ public class SExprs {
         @Override
         public void writeTo(Appendable buffer) throws IOException {
             buffer.append(repr.get().toString());
+        }
+    }
+
+    enum InfinityValue implements SExpr {
+        NEGATIVE(Double.NEGATIVE_INFINITY),
+        POSITIVE(Double.POSITIVE_INFINITY);
+
+        private Optional<Double> repr;
+        private double value;
+
+        InfinityValue(double value) {
+            this.value = value;
+            this.repr = Optional.of(value);
+        }
+
+        @Override
+        public boolean isInfinity() {
+            return true;
+        }
+
+        @Override
+        public Optional<Double> getInfinityValue() {
+            return this.repr;
+        }
+
+        @Override
+        public String toString() {
+            return this.toWrittenString();
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            if (this.value < 0)
+                buffer.append("-inf.0");
+            else
+                buffer.append("+inf.0");
+        }
+    }
+
+    enum NanValue implements SExpr {
+        INSTANCE;
+
+        private Optional<Double> repr;
+
+        NanValue() {
+            this.repr = Optional.of(Double.NaN);
+        }
+
+        @Override
+        public boolean isNan() {
+            return true;
+        }
+
+        @Override
+        public Optional<Double> getNanValue() {
+            return this.repr;
+        }
+
+        @Override
+        public String toString() {
+            return this.toWrittenString();
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            buffer.append("+nan.0");
         }
     }
 

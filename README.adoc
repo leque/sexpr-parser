@@ -8,6 +8,7 @@ Supported syntaxes are:
 * boolean,
 * integer (binary, octal, decimal, and hexadecimal),
 * flonum,
+* infnan (represented as a symbol in the grammar),
 * string,
 * symbol,
 * proper- and dotted-list,
@@ -21,7 +22,6 @@ Unsupported syntaxes are:
 * character,
 * bytevector,
 * exactness prefix,
-* infnan,
 * complex,
 * rational,
 * datum label, and

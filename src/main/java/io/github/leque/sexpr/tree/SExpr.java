@@ -33,6 +33,22 @@ public interface SExpr {
         return Optional.empty();
     }
 
+    default boolean isInfinity() {
+        return false;
+    }
+
+    default Optional<Double> getInfinityValue() {
+        return Optional.empty();
+    }
+
+    default boolean isNan() {
+        return false;
+    }
+
+    default Optional<Double> getNanValue() {
+        return Optional.empty();
+    }
+
     default boolean isString() {
         return false;
     }

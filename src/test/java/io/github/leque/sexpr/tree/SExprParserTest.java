@@ -84,6 +84,27 @@ class SExprParserTest {
     }
 
     @Test
+    public void SExprParser_is_able_to_parse_inf_and_nan() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        SExprs.nanValue(),
+                        SExprParser.parse("+nan.0")),
+                () -> Assertions.assertEquals(
+                        SExprs.nanValue(),
+                        SExprParser.parse("-nan.0")),
+                () -> Assertions.assertEquals(
+                        SExprs.positiveInfinityValue(),
+                        SExprParser.parse("+inf.0")),
+                () -> Assertions.assertEquals(
+                        SExprs.negativeInfinityValue(),
+                        SExprParser.parse("-inf.0")),
+                () -> Assertions.assertEquals(
+                        SExprs.negativeInfinityValue(),
+                        SExprParser.parse("-Inf.0"))
+        );
+    }
+
+    @Test
     public void SExprParser_is_able_to_parse_string() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(

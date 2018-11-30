@@ -255,7 +255,15 @@ public class SExprParser {
 
         @Override
         public void exitIdentifier(SchemeParser.IdentifierContext ctx) {
-            pushValue(SExprs.symbolValue(inputText(ctx)));
+            String text = inputText(ctx);
+            if (SExprs.isNan(text))
+                pushValue(SExprs.nanValue());
+            else if (SExprs.isNegativeInf(text))
+                pushValue(SExprs.negativeInfinityValue());
+            else if (SExprs.isPositiveInf(text))
+                pushValue(SExprs.positiveInfinityValue());
+            else
+                pushValue(SExprs.symbolValue(text));
             super.exitIdentifier(ctx);
         }
 

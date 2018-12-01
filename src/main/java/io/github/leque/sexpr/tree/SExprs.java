@@ -24,6 +24,12 @@ public class SExprs {
         return BooleanValue.FALSE;
     }
 
+    public static SExpr characterValue(int codePoint) {
+        if (Character.isDefined(codePoint) == false)
+            throw new IllegalArgumentException(String.format("argument out of range: 0x%x", codePoint));
+        return new CharacterValue(codePoint);
+    }
+
     public static SExpr integerValue(BigInteger repr) {
         return new IntegerValue(repr);
     }
@@ -205,6 +211,83 @@ public class SExprs {
         @Override
         public void writeTo(Appendable buffer) throws IOException {
             buffer.append(this.value ? "#t" : "#f");
+        }
+    }
+
+    public static class CharacterValue implements SExpr {
+        private final int value;
+        private final Optional<Integer> repr;
+
+        private CharacterValue(int value) {
+            this.value = value;
+            this.repr = Optional.of(value);
+        }
+
+        @Override
+        public boolean isCharacter() {
+            return true;
+        }
+
+        @Override
+        public Optional<Integer> getCharacterCodePoint() {
+            return repr;
+        }
+
+        @Override
+        public String toString() {
+            return this.toWrittenString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CharacterValue that = (CharacterValue) o;
+            return Objects.equals(repr, that.repr);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(repr);
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            switch (this.value) {
+                case '\u0007':
+                    buffer.append("#\\alarm");
+                    break;
+                case '\b':
+                    buffer.append("#\\backspace");
+                    break;
+                case '\u007f':
+                    buffer.append("#\\delete");
+                    break;
+                case '\u001b':
+                    buffer.append("#\\escape");
+                    break;
+                case '\n':
+                    buffer.append("#\\newline");
+                    break;
+                case '\u0000':
+                    buffer.append("#\\null");
+                    break;
+                case '\r':
+                    buffer.append("#\\return");
+                    break;
+                case '\u0020':
+                    buffer.append("#\\space");
+                    break;
+                case '\t':
+                    buffer.append("#\\tab");
+                    break;
+                default:
+                    if (Character.isISOControl(this.value)) {
+                        buffer.append(String.format("#\\x%x", this.value));
+                    } else {
+                        buffer.append("#\\x" + new String(Character.toChars(this.value)));
+                    }
+            }
         }
     }
 

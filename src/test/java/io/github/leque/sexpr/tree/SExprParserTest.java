@@ -27,6 +27,36 @@ class SExprParserTest {
     }
 
     @Test
+    public void SExprParser_is_able_to_parse_character() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue('a'),
+                        SExprParser.parse("#\\a")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue('1'),
+                        SExprParser.parse("#\\1")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue('x'),
+                        SExprParser.parse("#\\x")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue('\n'),
+                        SExprParser.parse("#\\newline")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue('\n'),
+                        SExprParser.parse("#\\NewLine")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue(0x1f600),
+                        SExprParser.parse("#\\x1f600")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue(0x1f607),
+                        SExprParser.parse("#\\X1F607")),
+                () -> Assertions.assertEquals(
+                        SExprs.characterValue(0x1f600),
+                        SExprParser.parse("#\\😀"))
+        );
+    }
+
+    @Test
     public void SExprParser_is_able_to_parse_integer() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(

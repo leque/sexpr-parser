@@ -20,6 +20,32 @@ grammar Scheme;
 // THE SOFTWARE.
 
 // fragments
+fragment A: [Aa];
+fragment B: [Bb];
+fragment C: [Cc];
+fragment D: [Dd];
+fragment E: [Ee];
+fragment F: [Ff];
+fragment G: [Gg];
+fragment H: [Hh];
+fragment I: [Ii];
+fragment J: [Jj];
+fragment K: [Kk];
+fragment L: [Ll];
+fragment M: [Mm];
+fragment N: [Nn];
+fragment O: [Oo];
+fragment P: [Pp];
+fragment Q: [Qq];
+fragment R: [Rr];
+fragment S: [Ss];
+fragment T: [Tt];
+fragment U: [Uu];
+fragment V: [Vv];
+fragment W: [Ww];
+fragment X: [Xx];
+fragment Y: [Yy];
+fragment Z: [Zz];
 
 fragment Digit : [0-9];
 
@@ -97,6 +123,22 @@ True : '#' [Tt] ([Rr] [Uu] [Ee])?;
 
 False : '#' [Ff] ([Aa] [Ll] [Ss] [Ee])?;
 
+Char : '#\\' .;
+
+HexChar : '#\\' [Xx] HexDigit+;
+
+NamedChar : '#\\' CharacterName;
+
+CharacterName : A L A R M
+  | B A C K S P A C E
+  | D E L E T E
+  | E S C A P E
+  | N E W L I N E
+  | N U L L
+  | R E T U R N
+  | S P A C E
+  | T A B;
+
 LineComment : ';' (~[\r\n])* (LineEnding | EOF);
 
 String : '"' StringElement* '"';
@@ -134,6 +176,12 @@ true_ : True;
 
 false_ : False;
 
+char_ : Char;
+
+hexChar : HexChar;
+
+namedChar : NamedChar;
+
 identifier: Identifier;
 
 escapedIdentifier: EscapedSymbol;
@@ -160,6 +208,7 @@ sexpr : intertokenSpace
  ( integer | integer2 | integer8 | integer16
  | flonum
  | true_ | false_
+ | char_ | hexChar | namedChar
  | string | identifier | escapedIdentifier
  | list | dottedList | vector
  | abbreviation

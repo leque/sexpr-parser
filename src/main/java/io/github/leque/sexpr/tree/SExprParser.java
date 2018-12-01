@@ -158,6 +158,27 @@ public class SExprParser {
         }
 
         @Override
+        public void exitChar_(SchemeParser.Char_Context ctx) {
+            String text = inputText(ctx);
+            pushValue(SExprs.characterValue(text.codePointAt(2)));
+            super.exitChar_(ctx);
+        }
+
+        @Override
+        public void exitHexChar(SchemeParser.HexCharContext ctx) {
+            String text = inputText(ctx);
+            pushValue(SExprs.characterValue(Integer.valueOf(text.substring(3), 16)));
+            super.exitHexChar(ctx);
+        }
+
+        @Override
+        public void exitNamedChar(SchemeParser.NamedCharContext ctx) {
+            String text = inputText(ctx);
+            pushValue(SExprs.characterValue(namedChars.get(text.substring(2).toLowerCase())));
+            super.exitNamedChar(ctx);
+        }
+
+        @Override
         public void exitInteger(SchemeParser.IntegerContext ctx) {
             String text = inputText(ctx);
             if (text.startsWith("#"))
@@ -202,6 +223,18 @@ public class SExprParser {
             pushValue(SExprs.stringValue(interpretEscapeSequences(text.substring(1, text.length() - 1))));
             super.exitString(ctx);
         }
+
+        private static Map<String, Integer> namedChars = new HashMap<String, Integer>() {{
+            put("alarm", 0x0007);
+            put("backspace", 0x0008);
+            put("delete", 0x007f);
+            put("escape", 0x001b);
+            put("newline", 0x000a);
+            put("null", 0x0000);
+            put("return", 0x000D);
+            put("space", 0x0020);
+            put("tab", 0x0009);
+        }};
 
         private static Map<Character, Character> escapeSequences = new HashMap<Character, Character>() {{
             put('a', '\u0007');

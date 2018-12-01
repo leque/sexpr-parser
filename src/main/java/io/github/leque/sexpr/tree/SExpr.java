@@ -21,6 +21,14 @@ public interface SExpr {
         return false;
     }
 
+    default boolean isCharacter() {
+        return false;
+    }
+
+    default Optional<Integer> getCharacterCodePoint() {
+        return Optional.empty();
+    }
+
     default Optional<BigInteger> getIntegerValue() {
         return Optional.empty();
     }

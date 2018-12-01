@@ -71,7 +71,7 @@ fragment LineEnding : '\n' | '\r\n' | '\r';
 
 fragment Whitespace : IntralineWhitespace | LineEnding;
 
-fragment HexEscape : '\\x' HexDigit+ ';';
+fragment HexEscape : '\\' X HexDigit+ ';';
 
 fragment MnemonicEscape : '\\' [abtnr];
 

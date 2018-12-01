@@ -144,6 +144,9 @@ class SExprParserTest {
                         SExprs.stringValue("\u0042"),
                         SExprParser.parse("\"\\x42;\"")),
                 () -> Assertions.assertEquals(
+                        SExprs.stringValue("\u0042"),
+                        SExprParser.parse("\"\\X42;\"")),
+                () -> Assertions.assertEquals(
                         SExprs.stringValue("\n"),
                         SExprParser.parse("\"\\n\"")),
                 () -> Assertions.assertEquals(
@@ -194,6 +197,9 @@ class SExprParserTest {
                 () -> Assertions.assertEquals(
                         SExprs.symbolValue("\u0042"),
                         SExprParser.parse("|\\x42;|")),
+                () -> Assertions.assertEquals(
+                        SExprs.symbolValue("\u0042"),
+                        SExprParser.parse("|\\X42;|")),
                 () -> Assertions.assertEquals(
                         SExprs.symbolValue("\n"),
                         SExprParser.parse("|\\n|")),

@@ -63,7 +63,7 @@ fragment ExplicitSign : '-' | '+';
 
 fragment Sign : ExplicitSign?;
 
-fragment Exp : [eE] Digit10+;
+fragment Exp : E Digit10+;
 
 fragment IntralineWhitespace : [ \t];
 
@@ -107,11 +107,11 @@ fragment Radix10 : ('#' [Dd])?;
 // lexer rules
 Integer10 : Radix10 Sign Digit+;
 
-Integer2 : '#' [Bb] Sign Digit2+;
+Integer2 : '#' B Sign Digit2+;
 
-Integer8 : '#' [Oo] Sign Digit8+;
+Integer8 : '#' O Sign Digit8+;
 
-Integer16 : '#' [Xx] Sign Digit16+;
+Integer16 : '#' X Sign Digit16+;
 
 Flonum : Radix10 Sign
          ( Digit10+ Exp
@@ -119,13 +119,13 @@ Flonum : Radix10 Sign
          | Digit10+ '.' Digit10* Exp?
          );
 
-True : '#' [Tt] ([Rr] [Uu] [Ee])?;
+True : '#' T (R U E)?;
 
-False : '#' [Ff] ([Aa] [Ll] [Ss] [Ee])?;
+False : '#' F (A L S E)?;
 
 Char : '#\\' .;
 
-HexChar : '#\\' [Xx] HexDigit+;
+HexChar : '#\\' X HexDigit+;
 
 NamedChar : '#\\' CharacterName;
 

@@ -60,31 +60,31 @@ class SExprParserTest {
     public void SExprParser_is_able_to_parse_integer() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(42),
+                        SExprs.numberValue(42),
                         SExprParser.parse("42")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(56),
+                        SExprs.numberValue(56),
                         SExprParser.parse("#d56")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(-42),
+                        SExprs.numberValue(-42),
                         SExprParser.parse("#D-42")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(0xcafebabeL),
+                        SExprs.numberValue(0xcafebabeL),
                         SExprParser.parse("#Xcafebabe")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(-0xdeadbeefL),
+                        SExprs.numberValue(-0xdeadbeefL),
                         SExprParser.parse("#x-DeadBeef")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(0666),
+                        SExprs.numberValue(0666),
                         SExprParser.parse("#o666")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(-0644),
+                        SExprs.numberValue(-0644),
                         SExprParser.parse("#O-644")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(-0b1101),
+                        SExprs.numberValue(-0b1101),
                         SExprParser.parse("#B-1101")),
                 () -> Assertions.assertEquals(
-                        SExprs.integerValue(0b101),
+                        SExprs.numberValue(0b101),
                         SExprParser.parse("#b101"))
         );
     }
@@ -93,22 +93,22 @@ class SExprParserTest {
     public void SExprParser_is_able_to_parse_flonum() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(
-                        SExprs.flonumValue("42.0"),
+                        SExprs.numberValue("42.0"),
                         SExprParser.parse("42.")),
                 () -> Assertions.assertEquals(
-                        SExprs.flonumValue("42.0"),
+                        SExprs.numberValue("42.0"),
                         SExprParser.parse("#d42.")),
                 () -> Assertions.assertEquals(
-                        SExprs.flonumValue("42.0"),
+                        SExprs.numberValue("42.0"),
                         SExprParser.parse(".42e2")),
                 () -> Assertions.assertEquals(
-                        SExprs.flonumValue("42.0"),
+                        SExprs.numberValue("42.0"),
                         SExprParser.parse("4.2e1")),
                 () -> Assertions.assertEquals(
-                        SExprs.flonumValue("42.0"),
+                        SExprs.numberValue("42.0"),
                         SExprParser.parse("42.e0")),
                 () -> Assertions.assertEquals(
-                        SExprs.flonumValue("42.0"),
+                        SExprs.numberValue("42.0"),
                         SExprParser.parse("42e0"))
         );
     }
@@ -225,7 +225,7 @@ class SExprParserTest {
     public void SExprParser_is_able_to_parse_list() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(
-                        SExprs.listValue(SExprs.trueValue(), SExprs.integerValue(42), SExprs.falseValue()),
+                        SExprs.listValue(SExprs.trueValue(), SExprs.numberValue(42), SExprs.falseValue()),
                         SExprParser.parse("(#t 42 #f)"))
         );
     }
@@ -237,7 +237,7 @@ class SExprParserTest {
                         SExprs.dottedListValue(SExprs.trueValue(), SExprs.falseValue()),
                         SExprParser.parse("(#t . #f)")),
                 () -> Assertions.assertEquals(
-                        SExprs.dottedListValue(SExprs.trueValue(), SExprs.integerValue(42), SExprs.falseValue()),
+                        SExprs.dottedListValue(SExprs.trueValue(), SExprs.numberValue(42), SExprs.falseValue()),
                         SExprParser.parse("(#t 42 . #f)"))
         );
     }
@@ -246,7 +246,7 @@ class SExprParserTest {
     public void SExprParser_is_able_to_parse_vector() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(
-                        SExprs.vectorValue(SExprs.trueValue(), SExprs.integerValue(42), SExprs.falseValue()),
+                        SExprs.vectorValue(SExprs.trueValue(), SExprs.numberValue(42), SExprs.falseValue()),
                         SExprParser.parse("#(#t 42 #f)"))
         );
     }
@@ -260,15 +260,15 @@ class SExprParserTest {
                                 SExprs.listValue(SExprs.symbolValue("fact"), SExprs.symbolValue("n")),
                                 SExprs.listValue(
                                         SExprs.symbolValue("if"),
-                                        SExprs.listValue(SExprs.symbolValue("="), SExprs.symbolValue("n"), SExprs.integerValue(0)),
-                                        SExprs.integerValue(1),
+                                        SExprs.listValue(SExprs.symbolValue("="), SExprs.symbolValue("n"), SExprs.numberValue(0)),
+                                        SExprs.numberValue(1),
                                         SExprs.listValue(
                                                 SExprs.symbolValue("*"),
                                                 SExprs.symbolValue("n"),
                                                 SExprs.listValue(
                                                         SExprs.symbolValue("-"),
                                                         SExprs.symbolValue("n"),
-                                                        SExprs.integerValue(1))))),
+                                                        SExprs.numberValue(1))))),
                         SExprParser.parse("(define (fact n) (if (= n 0) 1 (* n (- n 1))))"))
         );
     }

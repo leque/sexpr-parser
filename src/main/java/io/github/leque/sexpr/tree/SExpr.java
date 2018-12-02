@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.misc.Pair;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +16,6 @@ public interface SExpr {
         return Optional.empty();
     }
 
-    default boolean isInteger() {
-        return false;
-    }
-
     default boolean isCharacter() {
         return false;
     }
@@ -29,15 +24,11 @@ public interface SExpr {
         return Optional.empty();
     }
 
-    default Optional<BigInteger> getIntegerValue() {
-        return Optional.empty();
-    }
-
-    default boolean isFlonum() {
+    default boolean isNumber() {
         return false;
     }
 
-    default Optional<BigDecimal> getFlonumValue() {
+    default Optional<BigDecimal> getNumberValue() {
         return Optional.empty();
     }
 

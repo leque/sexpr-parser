@@ -30,20 +30,20 @@ public class SExprs {
         return new CharacterValue(codePoint);
     }
 
-    public static SExpr integerValue(BigInteger repr) {
-        return new IntegerValue(repr);
+    public static SExpr numberValue(long repr) {
+        return new NumberValue(BigDecimal.valueOf(repr));
     }
 
-    public static SExpr integerValue(long repr) {
-        return new IntegerValue(BigInteger.valueOf(repr));
+    public static SExpr numberValue(BigInteger i) {
+        return new NumberValue(new BigDecimal(i));
     }
 
-    public static SExpr flonumValue(BigDecimal repr) {
-        return new FlonumValue(repr);
+    public static SExpr numberValue(BigDecimal repr) {
+        return new NumberValue(repr);
     }
 
-    public static SExpr flonumValue(String repr) {
-        return new FlonumValue(new BigDecimal(repr));
+    public static SExpr numberValue(String repr) {
+        return new NumberValue(new BigDecimal(repr));
     }
 
     public static SExpr negativeInfinityValue() {
@@ -291,61 +291,20 @@ public class SExprs {
         }
     }
 
-    public static class IntegerValue implements SExpr {
-        private final Optional<BigInteger> repr;
-
-        private IntegerValue(BigInteger repr) {
-            this.repr = Optional.of(repr);
-        }
-
-        @Override
-        public boolean isInteger() {
-            return true;
-        }
-
-        @Override
-        public Optional<BigInteger> getIntegerValue() {
-            return this.repr;
-        }
-
-        @Override
-        public String toString() {
-            return this.toWrittenString();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            IntegerValue that = (IntegerValue) o;
-            return Objects.equals(repr, that.repr);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(repr);
-        }
-
-        @Override
-        public void writeTo(Appendable buffer) throws IOException {
-            buffer.append(repr.get().toString());
-        }
-    }
-
-    public static class FlonumValue implements SExpr {
+    public static class NumberValue implements SExpr {
         private final Optional<BigDecimal> repr;
 
-        private FlonumValue(BigDecimal repr) {
+        private NumberValue(BigDecimal repr) {
             this.repr = Optional.of(repr);
         }
 
         @Override
-        public boolean isFlonum() {
+        public boolean isNumber() {
             return true;
         }
 
         @Override
-        public Optional<BigDecimal> getFlonumValue() {
+        public Optional<BigDecimal> getNumberValue() {
             return this.repr;
         }
 
@@ -358,7 +317,7 @@ public class SExprs {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            FlonumValue that = (FlonumValue) o;
+            NumberValue that = (NumberValue) o;
             return this.repr.get().compareTo(that.repr.get()) == 0;
         }
 

@@ -12,6 +12,7 @@ Supported syntaxes are:
 * infnan (represented as a symbol in the grammar),
 * string,
 * symbol,
+* bytevector,
 * proper- and dotted-list,
 * vector,
 * abbreviation,
@@ -20,7 +21,6 @@ Supported syntaxes are:
 
 Unsupported syntaxes are:
 
-* bytevector,
 * exactness prefix,
 * complex,
 * rational,

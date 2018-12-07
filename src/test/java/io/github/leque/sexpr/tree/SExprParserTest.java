@@ -221,6 +221,40 @@ class SExprParserTest {
         );
     }
 
+    private byte b(int i) {
+        return (byte)(i + Byte.MIN_VALUE);
+    }
+
+    @Test
+    public void SExprParser_is_able_to_parse_bytevector() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        SExprs.bytevectorValue(),
+                        SExprParser.parse("#u8()")),
+                () -> Assertions.assertEquals(
+                        SExprs.bytevectorValue(b(42), b(0b111100), b(042), b(42), b(0x42)),
+                        SExprParser.parse("#u8(42 #b111100 #o42 #d42 #x42)"))
+        );
+    }
+
+    @Test
+    public void SExprParser_signals_error_for_invalid_bytevector() {
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(
+                        Exception.class,
+                        () -> SExprParser.parse("#u8(a)")),
+                () -> Assertions.assertThrows(
+                        Exception.class,
+                        () -> SExprParser.parse("#u8(-1)")),
+                () -> Assertions.assertThrows(
+                        Exception.class,
+                        () -> SExprParser.parse("#u8(0.0)")),
+                () -> Assertions.assertThrows(
+                        Exception.class,
+                        () -> SExprParser.parse("#u8(#x100)"))
+        );
+    }
+
     @Test
     public void SExprParser_is_able_to_parse_list() {
         Assertions.assertAll(

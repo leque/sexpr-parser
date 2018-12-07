@@ -64,6 +64,14 @@ public interface SExpr {
         return Optional.empty();
     }
 
+    default boolean isBytevector() {
+        return false;
+    }
+
+    default Optional<byte[]> getBytevectorElements() {
+        return Optional.empty();
+    }
+
     default boolean isList() {
         return false;
     }

@@ -188,6 +188,8 @@ escapedIdentifier: EscapedSymbol;
 
 string: String;
 
+bytevector: '#u8(' (intertokenSpace (integer | integer2 | integer8 | integer16))* intertokenSpace ')';
+
 list: '(' sexpr* intertokenSpace ')';
 
 dottedList: '(' sexpr+ intertokenSpace '.' sexpr intertokenSpace ')';
@@ -210,6 +212,7 @@ sexpr : intertokenSpace
  | true_ | false_
  | char_ | hexChar | namedChar
  | string | identifier | escapedIdentifier
+ | bytevector
  | list | dottedList | vector
  | abbreviation
  );

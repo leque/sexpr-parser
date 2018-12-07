@@ -10,11 +10,13 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class SExprParser {
     private SExprParser() {
@@ -341,6 +343,30 @@ public class SExprParser {
         public void exitDatumComment(SchemeParser.DatumCommentContext ctx) {
             popValue();
             super.exitDatumComment(ctx);
+        }
+
+        @Override
+        public void enterBytevector(SchemeParser.BytevectorContext ctx) {
+            super.enterBytevector(ctx);
+            newEnv();
+        }
+
+        @Override
+        public void exitBytevector(SchemeParser.BytevectorContext ctx) {
+            List<SExpr> elems = popEnv();
+            ByteBuffer buf = ByteBuffer.allocate(elems.size());
+            for (SExpr elem : elems) {
+                Optional<BigDecimal> v = elem.getNumberValue();
+                if (v.isPresent()) {
+                    int n = v.get().intValueExact();
+                    if (0 <= n && n < 256)
+                        buf.put((byte)(n - Byte.MIN_VALUE));
+                    else
+                        throw new ArithmeticException("value not fit in byte: " + n);
+                }
+            }
+            pushValue(SExprs.bytevectorValue(buf.array()));
+            super.exitBytevector(ctx);
         }
 
         @Override

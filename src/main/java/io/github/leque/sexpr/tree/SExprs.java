@@ -66,6 +66,10 @@ public class SExprs {
         return new SymbolValue(repr);
     }
 
+    public static SExpr bytevectorValue(byte... elems) {
+        return new BytevectorValue(elems);
+    }
+
     public static SExpr listValue(List<SExpr> repr) {
         return new ListValue(repr);
     }
@@ -583,6 +587,56 @@ public class SExprs {
 
         private boolean isSignSubsequent(int cp) {
             return isInitial(cp) || isExplicitSign(cp) || cp == '@';
+        }
+    }
+
+    public static class BytevectorValue implements SExpr {
+        private final Optional<byte[]> repr;
+        private final byte[] value;
+
+        private BytevectorValue(byte[] value) {
+            this.value = value;
+            this.repr = Optional.of(value);
+        }
+
+        @Override
+        public boolean isBytevector() {
+            return true;
+        }
+
+        @Override
+        public Optional<byte[]> getBytevectorElements() {
+            return repr;
+        }
+
+        @Override
+        public String toString() {
+            return this.toWrittenString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            BytevectorValue that = (BytevectorValue) o;
+            return Arrays.equals(value, that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(value);
+        }
+
+        @Override
+        public void writeTo(Appendable buffer) throws IOException {
+            buffer.append("#u8(");
+            String sep = "";
+            for (byte b : this.repr.get()) {
+                buffer.append(sep);
+                buffer.append(String.format("%d", (int)b - Byte.MIN_VALUE));
+                sep = " ";
+            }
+            buffer.append(")");
         }
     }
 

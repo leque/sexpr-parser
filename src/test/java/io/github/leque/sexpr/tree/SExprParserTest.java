@@ -341,6 +341,20 @@ class SExprParserTest {
     }
 
     @Test
+    public void SExprParser_is_able_to_parse_block_comment() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        SExprParser.parse("(1 2 3)"),
+                        SExprParser.parse("(1 2 #|2.5|# 3)")),
+                () -> Assertions.assertEquals(
+                        SExprParser.parse("(1 2 3)"),
+                        SExprParser.parse("(1 2 #| #|2.5|# 2.75 |# 3)")),
+                () -> Assertions.assertThrows(Exception.class,
+                        () -> SExprParser.parse("#|#||#1"))
+        );
+    }
+
+    @Test
     public void SExprParser_is_able_to_parse_datum_comment() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(

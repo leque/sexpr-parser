@@ -16,16 +16,16 @@ Supported syntaxes are:
 * proper- and dotted-list,
 * vector,
 * abbreviation,
-* line comment, and
+* line comment,
+* block comment, and
 * datum comment.
 
 Unsupported syntaxes are:
 
 * exactness prefix,
 * complex,
-* rational,
-* datum label, and
-* block comment.
+* rational, and
+* datum label.
 
 == License
 

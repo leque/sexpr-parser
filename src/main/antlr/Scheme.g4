@@ -141,6 +141,12 @@ CharacterName : A L A R M
 
 LineComment : ';' (~[\r\n])* (LineEnding | EOF);
 
+BlockComment : '#|'
+               ( '#'*? BlockComment
+               | ('#'* | '|'*) ~[#|])*?
+               '|'*?
+               '|#';
+
 String : '"' StringElement* '"';
 
 EscapedSymbol : '|' SymbolElement* '|';
@@ -158,9 +164,11 @@ whiteSpaces : Whitespaces;
 
 lineComment : LineComment;
 
+blockComment : BlockComment;
+
 datumComment : '#;' sexpr;
 
-intertokenSpace : (whiteSpaces | lineComment | datumComment)*;
+intertokenSpace : (whiteSpaces | lineComment | blockComment | datumComment)*;
 
 integer : Integer10;
 

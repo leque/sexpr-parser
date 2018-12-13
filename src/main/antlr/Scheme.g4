@@ -102,7 +102,7 @@ fragment DotSubsequent : SignSubsequent | '.';
 
 fragment SignSubsequent : Initial | ExplicitSign | '@';
 
-fragment Radix10 : ('#' [Dd])?;
+fragment Radix10 : ('#' D)?;
 
 // lexer rules
 Integer10 : Radix10 Sign Digit+;

@@ -222,7 +222,7 @@ class SExprParserTest {
     }
 
     private byte b(int i) {
-        return (byte)(i + Byte.MIN_VALUE);
+        return (byte) (i + Byte.MIN_VALUE);
     }
 
     @Test
@@ -272,7 +272,19 @@ class SExprParserTest {
                         SExprParser.parse("(#t . #f)")),
                 () -> Assertions.assertEquals(
                         SExprs.dottedListValue(SExprs.trueValue(), SExprs.numberValue(42), SExprs.falseValue()),
-                        SExprParser.parse("(#t 42 . #f)"))
+                        SExprParser.parse("(#t 42 . #f)")),
+                () -> Assertions.assertEquals(
+                        SExprParser.parse("(1 2 3)"),
+                        SExprParser.parse("(1 . (2 3))")),
+                () -> Assertions.assertEquals(
+                        SExprParser.parse("(1 2 . 3)"),
+                        SExprParser.parse("(1 . (2 . 3))")),
+                () -> Assertions.assertEquals(
+                        SExprParser.parse("(1 2 . 3)"),
+                        SExprParser.parse("(1 . (2 . 3))")),
+                () -> Assertions.assertEquals(
+                        SExprParser.parse("(1 2 3)"),
+                        SExprParser.parse("(1 . (2 . (3)))"))
         );
     }
 

@@ -82,6 +82,22 @@ public class SExprs {
         if (elems.isEmpty()) {
             throw new IllegalArgumentException("dotted-list should have 2 or more elements");
         }
+        if (end.isList()) {
+            List<SExpr> tail = end.getListElements().get();
+            List<SExpr> es = new ArrayList<>(elems.size() + tail.size());
+            es.addAll(elems);
+            es.addAll(tail);
+            return listValue(es);
+        }
+        if (end.isDottedList()) {
+            Pair<List<SExpr>, SExpr> p = end.getDottedListElements().get();
+            List<SExpr> tail = p.a;
+            SExpr last = p.b;
+            List<SExpr> es = new ArrayList<>(elems.size() + tail.size());
+            es.addAll(elems);
+            es.addAll(tail);
+            return dottedListValue(es, last);
+        }
         return new DottedListValue(elems, end);
     }
 

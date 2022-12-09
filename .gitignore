@@ -1,3 +1,5 @@
+*.tokens
+
 # Created by https://www.toptal.com/developers/gitignore/api/gradle,intellij+all,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=gradle,intellij+all,java
 
@@ -35,14 +37,14 @@
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
 
 # CMake
 cmake-build-*/

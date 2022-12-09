@@ -7,11 +7,17 @@ repositories {
 }
 
 dependencies {
-    compile "org.antlr:antlr4-runtime:4.7.1"
-    antlr "org.antlr:antlr4:4.7.1"
+    // https://mvnrepository.com/artifact/org.antlr/antlr4-runtime
+    implementation 'org.antlr:antlr4-runtime:4.11.1'
 
-    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+    antlr "org.antlr:antlr4:4.11.1"
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 generateGrammarSource {

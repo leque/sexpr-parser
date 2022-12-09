@@ -149,6 +149,8 @@ BlockComment : '#|'
 
 String : '"' StringElement* '"';
 
+U8 : U '8';
+
 EscapedSymbol : '|' SymbolElement* '|';
 
 Identifier
@@ -196,7 +198,7 @@ escapedIdentifier: EscapedSymbol;
 
 string: String;
 
-bytevector: '#u8(' (intertokenSpace (integer | integer2 | integer8 | integer16))* intertokenSpace ')';
+bytevector: '#' U8 '(' (intertokenSpace (integer | integer2 | integer8 | integer16))* intertokenSpace ')';
 
 list: '(' sexpr* intertokenSpace ')';
 

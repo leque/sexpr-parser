@@ -232,6 +232,9 @@ class SExprParserTest {
                         SExprs.bytevectorValue(),
                         SExprParser.parse("#u8()")),
                 () -> Assertions.assertEquals(
+                        SExprs.bytevectorValue(b(42)),
+                        SExprParser.parse("#U8(42)")),
+                () -> Assertions.assertEquals(
                         SExprs.bytevectorValue(b(42), b(0b111100), b(042), b(42), b(0x42)),
                         SExprParser.parse("#u8(42 #b111100 #o42 #d42 #x42)"))
         );
